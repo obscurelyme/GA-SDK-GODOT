@@ -1,5 +1,5 @@
 def can_build(env, platform):
-    return platform == "iphone" or platform == "android" or platform == "windows" or platform == "osx" or platform == "macos" or platform == "x11" or platform == "javascript"
+    return platform == "iphone" or platform == "android" or platform == "windows" or platform == "osx" or platform == "macos" or platform == "linuxbsd" or platform == "javascript"
 
 
 def configure(env):
@@ -27,24 +27,17 @@ def configure(env):
             '-l', 'z'
         ])
     elif env["platform"] == "windows":
-        if env["bits"] == "32":
-            env.Append(LIBPATH=["#modules/gameanalytics/cpp/lib/win32"])
-            if env["use_mingw"]:
-                env.Append(LIBS=["GameAnalytics"])
-            else:
-                env.Append(LINKFLAGS=["GameAnalytics.lib"])
+        env.Append(LIBPATH=["#modules/gameanalytics/cpp/lib/win64"])
+        if env["use_mingw"]:
+            env.Append(LIBS=["GameAnalytics"])
         else:
-            env.Append(LIBPATH=["#modules/gameanalytics/cpp/lib/win64"])
-            if env["use_mingw"]:
-                env.Append(LIBS=["GameAnalytics"])
-            else:
-                env.Append(LINKFLAGS=["GameAnalytics.lib"])
+            env.Append(LINKFLAGS=["GameAnalytics.lib"])
     elif env["platform"] == "osx" or env["platform"] == "macos":
         print("here!!!")
         env.Append(LIBPATH=["#modules/gameanalytics/cpp/lib/osx"])
         env.Append(LIBS=["libGameAnalytics.dylib"])
         env.Append(RPATH=["."])
-    elif env["platform"] == "x11":
+    elif env["platform"] == "linuxbsd":
         env.Append(LIBPATH=["#modules/gameanalytics/cpp/lib/linux"])
         env.Append(LIBS=["libGameAnalytics.so", "libcurl.so", "libssl.so", "libcrypto.so"])
         env.Append(RPATH=["."])
